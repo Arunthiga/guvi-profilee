@@ -1,16 +1,20 @@
-
 function register() {
+
+    let name = $("#name").val();
+    let email = $("#email").val();
+    let password = $("#password").val();
+
     $.ajax({
         url: "php/register.php",
-        method: "POST",
+        type: "POST",
         data: {
-            name: $("#name").val(),
-            email: $("#email").val(),
-            password: $("#password").val()
+            name: name,
+            email: email,
+            password: password
         },
-        success: function(res) {
+        success: function(res){
             alert(res);
-            window.location = "login.html";
         }
     });
+
 }
