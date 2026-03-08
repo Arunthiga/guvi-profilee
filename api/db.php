@@ -1,10 +1,10 @@
 <?php
 
-$host = getenv('MYSQLHOST') ?: "mysql-59f16e5-ngobi9121-c89f.l.aivencloud.com";
-$user = getenv('MYSQLUSER') ?: "avnadmin";
-$password = getenv('MYSQLPASSWORD') ?: "AVNS_-OUNyX3kZh2UdkWYMdb";
-$database = getenv('MYSQLDATABASE') ?: "defaultdb";
-$port = getenv('MYSQLPORT') ?: 11496;
+$host = getenv('MYSQLHOST');
+$user = getenv('MYSQLUSER');
+$password = getenv('MYSQLPASSWORD');
+$database = getenv('MYSQLDATABASE');
+$port = getenv('MYSQLPORT') ?: 3306;
 
 $conn = mysqli_init();
 mysqli_ssl_set($conn, NULL, NULL, NULL, NULL, NULL); 
