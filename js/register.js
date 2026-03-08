@@ -14,6 +14,9 @@ function register() {
         },
         success: function(res){
             alert(res);
+            if(res.includes("success")) {
+                window.location = "login.html";
+            }
         }
     });
 

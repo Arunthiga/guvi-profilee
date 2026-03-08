@@ -8,7 +8,7 @@ $sql = "SELECT * FROM users WHERE email='$email' AND password='$password'";
 $result = mysqli_query($conn,$sql);
 
 if(mysqli_num_rows($result)>0){
-    echo "Login success";
+    echo "success";
 }else{
     echo "Invalid login";
 }
