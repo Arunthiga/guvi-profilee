@@ -1,0 +1,5 @@
+/vendor
+.env
+.vercel
+.php_cs.cache
+composer.phar
