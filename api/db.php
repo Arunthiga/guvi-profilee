@@ -14,4 +14,13 @@ if(!$conn){
     die("Database connection failed: " . mysqli_connect_error());
 }
 
+// Automatically create 'users' table if it doesn't exist
+$sql = "CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+)";
+mysqli_query($conn, $sql);
+
 ?>
