@@ -1,6 +1,6 @@
 function saveProfile() {
 
-    $.post("php/profile.php", {
+    $.post("/api/profile.php", {
 
         email: localStorage.getItem("user"),
         fullname: $("#fullname").val(),

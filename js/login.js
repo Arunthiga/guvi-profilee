@@ -1,5 +1,5 @@
 function login() {
-    $.post("php/login.php", {
+    $.post("/api/login.php", {
         email: $("#email").val(),
         password: $("#password").val()
     }, function(res) {

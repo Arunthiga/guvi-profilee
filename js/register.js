@@ -5,7 +5,7 @@ function register() {
     let password = $("#password").val();
 
     $.ajax({
-        url: "php/register.php",
+        url: "/api/register.php",
         type: "POST",
         data: {
             name: name,
