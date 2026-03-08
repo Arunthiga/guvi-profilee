@@ -3,7 +3,8 @@ require 'vendor/autoload.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $client = new MongoDB\Client("mongodb+srv://arunthiga:arunthiga123@guvicluster.oha3mwh.mongodb.net/?appName=guvicluster);
+    $mongoUri = getenv('MONGODB_URI') ?: "mongodb+srv://arunthiga:arunthiga123@guvicluster.oha3mwh.mongodb.net/?appName=guvicluster";
+    $client = new MongoDB\Client($mongoUri);
     $collection = $client->guvi->profiles;
 
     $data = [
