@@ -1,17 +1,23 @@
 $(document).ready(function() {
     let email = localStorage.getItem("user");
-    if (!email) {
+    let token = localStorage.getItem("token");
+    if (!email || !token) {
         window.location = "login.html";
         return;
     }
 
     $("#displayEmail").text(email);
 
-    $.get("/api/profile_get.php", { email: email }, function(data) {
+    $.get("/api/profile_get.php", { email: email, token: token }, function(data) {
         if (!data) return;
         try {
             let profile = JSON.parse(data);
             if (profile && !profile.error && !profile.new_user) {
+                if (profile.status === "error") {
+                    alert(profile.message);
+                    window.location = "login.html";
+                    return;
+                }
                 $("#displayName").text(profile.fullname || "User");
                 $("#fullname").val(profile.fullname);
                 $("#skills").val(profile.skills);
@@ -24,14 +30,16 @@ $(document).ready(function() {
                 $("#bio").val(profile.bio);
             }
         } catch (e) {
-            console.error("Error parsing profile data");
+            console.error("Error parsing profile data:", data);
         }
     });
 });
 
 function saveProfile() {
     let email = localStorage.getItem("user");
+    let token = localStorage.getItem("token");
     $.post("/api/profile.php", {
+        token: token,
         email: email,
         fullname: $("#fullname").val(),
         skills: $("#skills").val(),
@@ -44,6 +52,18 @@ function saveProfile() {
         bio: $("#bio").val()
     }, function(res) {
         alert(res);
-        $("#displayName").text($("#fullname").val() || "User");
+        if (res.trim() === "Profile Saved Successfully") {
+            $("#displayName").text($("#fullname").val() || "User");
+        } else if (res.trim() === "Unauthorized" || res.trim() === "Invalid session") {
+            window.location = "login.html";
+        }
+    });
+}
+function logout() {
+    let token = localStorage.getItem('token');
+    $.post('/api/logout.php', { token: token }, function() {
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        window.location = 'login.html';
     });
 }

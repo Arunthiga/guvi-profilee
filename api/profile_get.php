@@ -1,17 +1,22 @@
-<?php
-require __DIR__ . '/../vendor/autoload.php';
+require_once "redis_db.php";
+require_once "mongo_db.php";
 
+$token = $_GET['token'] ?? '';
 $email = $_GET['email'] ?? '';
 
-if (!$email) {
-    echo json_encode(["error" => "Email required"]);
+if (!$token || !$email) {
+    echo json_encode(["status" => "error", "message" => "Unauthorized"]);
     exit();
 }
 
-$mongoUri = getenv('MONGODB_URI') ?: "mongodb+srv://arunthiga:arunthiga123@guvicluster.oha3mwh.mongodb.net/?appName=guvicluster";
-$client = new MongoDB\Client($mongoUri);
-$collection = $client->guvi->profiles;
+$session = getSession($token);
 
+if (!$session || $session['email'] !== $email) {
+    echo json_encode(["status" => "error", "message" => "Invalid session"]);
+    exit();
+}
+
+$collection = $mongoDb->profiles;
 $profile = $collection->findOne(["email" => $email]);
 
 if ($profile) {
@@ -19,4 +24,3 @@ if ($profile) {
 } else {
     echo json_encode(["email" => $email, "new_user" => true]);
 }
-?>

@@ -6,11 +6,18 @@ function login() {
         email: email,
         password: password
     }, function(res) {
-        if(res.trim() === "success") {
-            localStorage.setItem("user", email);
-            window.location = "profile.html";
-        } else {
-            alert("Invalid login");
+        try {
+            let response = JSON.parse(res);
+            if(response.status === "success") {
+                localStorage.setItem("user", response.email);
+                localStorage.setItem("token", response.token);
+                window.location = "profile.html";
+            } else {
+                alert(response.message || "Invalid login");
+            }
+        } catch (e) {
+            console.error("Login error:", res);
+            alert("An error occurred during login.");
         }
     });
 }

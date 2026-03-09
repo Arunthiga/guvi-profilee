@@ -1,14 +1,27 @@
 <?php
-require __DIR__ . '/../vendor/autoload.php';
+require_once "redis_db.php";
+require_once "mongo_db.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $mongoUri = getenv('MONGODB_URI') ?: "mongodb+srv://arunthiga:arunthiga123@guvicluster.oha3mwh.mongodb.net/?appName=guvicluster";
-    $client = new MongoDB\Client($mongoUri);
-    $collection = $client->guvi->profiles;
+    $token = $_POST['token'] ?? '';
+    $email = $_POST['email'] ?? '';
+
+    if (!$token || !$email) {
+        echo "Unauthorized";
+        exit();
+    }
+
+    $session = getSession($token);
+    if (!$session || $session['email'] !== $email) {
+        echo "Invalid session";
+        exit();
+    }
+
+    $collection = $mongoDb->profiles;
 
     $data = [
-        "email" => $_POST['email'] ?? "",
+        "email" => $email,
         "fullname" => $_POST['fullname'] ?? "",
         "skills" => $_POST['skills'] ?? "",
         "gender" => $_POST['gender'] ?? "",
@@ -21,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     ];
 
     $collection->updateOne(
-        ["email" => $_POST['email']],
+        ["email" => $email],
         ['$set' => $data],
         ["upsert" => true]
     );

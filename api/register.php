@@ -13,15 +13,21 @@ if($name=="" || $email=="" || $password==""){
     exit();
 }
 
-$sql = "INSERT INTO users (name,email,password) VALUES ('$name','$email','$password')";
+// Hashing password for security
+$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-if(mysqli_query($conn,$sql)){
+$stmt = $conn->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
+$stmt->bind_param("sss", $name, $email, $hashed_password);
+
+if($stmt->execute()){
     echo "Register success";
 }else{
-    if (mysqli_errno($conn) == 1062) {
+    if ($stmt->errno == 1062) {
         echo "Email already exists! Please login instead.";
     } else {
         echo "Error: Something went wrong.";
     }
 }
+$stmt->close();
+$conn->close();
 ?>

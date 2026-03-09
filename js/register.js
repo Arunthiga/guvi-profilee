@@ -14,7 +14,7 @@ function register() {
         },
         success: function(res){
             alert(res);
-            if(res.includes("success")) {
+            if(res.toLowerCase().includes("success")) {
                 window.location = "login.html";
             }
         }
