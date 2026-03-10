@@ -6,7 +6,7 @@ $(document).ready(function() {
         return;
     }
 
-    $(\"#displayEmail\").text(email);
+    $("#displayEmail").text(email);
 
     $.get("/api/profile_get.php", { email: email, token: token }, function(data) {
         if (!data) return;
@@ -18,16 +18,16 @@ $(document).ready(function() {
                     window.location = "login.html";
                     return;
                 }
-                $(\"#displayName\").text(profile.fullname || "User");
-                $(\"#fullname\").val(profile.fullname);
-                $(\"#skills\").val(profile.skills);
-                $(\"#gender\").val(profile.gender);
-                $(\"#country\").val(profile.country);
-                $(\"#age\").val(profile.age);
-                $(\"#dob\").val(profile.dob);
-                $(\"#contact\").val(profile.contact);
-                $(\"#city\").val(profile.city);
-                $(\"#bio\").val(profile.bio);
+                $("#displayName").text(profile.fullname || "User");
+                $("#fullname").val(profile.fullname);
+                $("#skills").val(profile.skills);
+                $("#gender").val(profile.gender);
+                $("#country").val(profile.country);
+                $("#age").val(profile.age);
+                $("#dob").val(profile.dob);
+                $("#contact").val(profile.contact);
+                $("#city").val(profile.city);
+                $("#bio").val(profile.bio);
             }
         } catch (e) {
             console.error("Error parsing profile data:", data);
@@ -42,15 +42,15 @@ function saveProfile() {
     let profileData = {
         token: token,
         email: email,
-        fullname: $(\"#fullname\").val(),
-        skills: $(\"#skills\").val(),
-        gender: $(\"#gender\").val(),
-        country: $(\"#country\").val(),
-        age: $(\"#age\").val(),
-        dob: $(\"#dob\").val(),
-        contact: $(\"#contact\").val(),
-        city: $(\"#city\").val(),
-        bio: $(\"#bio\").val()
+        fullname: $("#fullname").val(),
+        skills: $("#skills").val(),
+        gender: $("#gender").val(),
+        country: $("#country").val(),
+        age: $("#age").val(),
+        dob: $("#dob").val(),
+        contact: $("#contact").val(),
+        city: $("#city").val(),
+        bio: $("#bio").val()
     };
 
     $.post("/api/profile.php", profileData, function(res) {
@@ -68,7 +68,7 @@ function saveProfile() {
                 city:     profileData.city,
                 bio:      profileData.bio
             }));
-            $(\"#displayName\").text(profileData.fullname || "User");
+            $("#displayName").text(profileData.fullname || "User");
         } else if (res.trim() === "Unauthorized" || res.trim() === "Invalid session") {
             window.location = "login.html";
         }
