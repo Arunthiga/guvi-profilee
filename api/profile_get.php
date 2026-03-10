@@ -1,3 +1,4 @@
+<?php
 require_once "redis_db.php";
 require_once "mongo_db.php";
 
