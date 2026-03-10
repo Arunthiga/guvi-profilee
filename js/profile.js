@@ -88,8 +88,9 @@ function saveProfile() {
     };
 
     $.post("/api/profile.php", profileData, function(res) {
+        console.log("Save response:", res);
         alert(res);
-        if (res.trim() === "Profile Saved Successfully") {
+        if (res.toLowerCase().includes("saved successfully")) {
             // Save to localStorage
             let stored = {
                 fullname: profileData.fullname,
@@ -108,7 +109,7 @@ function saveProfile() {
             $("#displayName").text(profileData.fullname || "Your Name");
             $("#displayEmail").text(profileData.email);
 
-        } else if (res.trim() === "Unauthorized" || res.trim() === "Invalid session") {
+        } else if (res.toLowerCase().includes("unauthorized") || res.toLowerCase().includes("invalid session")) {
             window.location = "login.html";
         }
     });
