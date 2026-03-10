@@ -36,8 +36,8 @@ WORKDIR /var/www/html
 # Copy project files
 COPY . .
 
-# Install composer dependencies
-RUN composer install --no-interaction --optimize-autoloader
+# Install composer dependencies (update to regenerate lock file fresh)
+RUN composer update --no-interaction --optimize-autoloader --ignore-platform-reqs
 
 # Set permissions for Apache
 RUN chown -R www-data:www-data /var/www/html
