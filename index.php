@@ -1,3 +1,4 @@
 <?php
-echo "Vercel PHP project is running!";
+header("Location: login.html");
+exit();
 ?>
