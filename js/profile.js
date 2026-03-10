@@ -6,8 +6,28 @@ $(document).ready(function() {
         return;
     }
 
+    // Show email in header
     $("#displayEmail").text(email);
 
+    // Load cached profile from localStorage first (instant display)
+    let cachedProfile = localStorage.getItem("profile");
+    if (cachedProfile) {
+        try {
+            let p = JSON.parse(cachedProfile);
+            $("#displayName").text(p.fullname || "Your Name");
+            $("#fullname").val(p.fullname);
+            $("#skills").val(p.skills);
+            $("#gender").val(p.gender);
+            $("#country").val(p.country);
+            $("#age").val(p.age);
+            $("#dob").val(p.dob);
+            $("#contact").val(p.contact);
+            $("#city").val(p.city);
+            $("#bio").val(p.bio);
+        } catch(e) {}
+    }
+
+    // Also fetch from server (to get latest data)
     $.get("/api/profile_get.php", { email: email, token: token }, function(data) {
         if (!data) return;
         try {
@@ -18,7 +38,8 @@ $(document).ready(function() {
                     window.location = "login.html";
                     return;
                 }
-                $("#displayName").text(profile.fullname || "User");
+                // Update display with server data
+                $("#displayName").text(profile.fullname || "Your Name");
                 $("#fullname").val(profile.fullname);
                 $("#skills").val(profile.skills);
                 $("#gender").val(profile.gender);
@@ -28,6 +49,19 @@ $(document).ready(function() {
                 $("#contact").val(profile.contact);
                 $("#city").val(profile.city);
                 $("#bio").val(profile.bio);
+
+                // Update localStorage with fresh server data
+                localStorage.setItem("profile", JSON.stringify({
+                    fullname: profile.fullname,
+                    skills:   profile.skills,
+                    gender:   profile.gender,
+                    country:  profile.country,
+                    age:      profile.age,
+                    dob:      profile.dob,
+                    contact:  profile.contact,
+                    city:     profile.city,
+                    bio:      profile.bio
+                }));
             }
         } catch (e) {
             console.error("Error parsing profile data:", data);
@@ -40,24 +74,24 @@ function saveProfile() {
     let token = localStorage.getItem("token");
 
     let profileData = {
-        token: token,
-        email: email,
+        token:    token,
+        email:    email,
         fullname: $("#fullname").val(),
-        skills: $("#skills").val(),
-        gender: $("#gender").val(),
-        country: $("#country").val(),
-        age: $("#age").val(),
-        dob: $("#dob").val(),
-        contact: $("#contact").val(),
-        city: $("#city").val(),
-        bio: $("#bio").val()
+        skills:   $("#skills").val(),
+        gender:   $("#gender").val(),
+        country:  $("#country").val(),
+        age:      $("#age").val(),
+        dob:      $("#dob").val(),
+        contact:  $("#contact").val(),
+        city:     $("#city").val(),
+        bio:      $("#bio").val()
     };
 
     $.post("/api/profile.php", profileData, function(res) {
         alert(res);
         if (res.trim() === "Profile Saved Successfully") {
-            // Save profile details to localStorage
-            localStorage.setItem("profile", JSON.stringify({
+            // Save to localStorage
+            let stored = {
                 fullname: profileData.fullname,
                 skills:   profileData.skills,
                 gender:   profileData.gender,
@@ -67,8 +101,13 @@ function saveProfile() {
                 contact:  profileData.contact,
                 city:     profileData.city,
                 bio:      profileData.bio
-            }));
-            $("#displayName").text(profileData.fullname || "User");
+            };
+            localStorage.setItem("profile", JSON.stringify(stored));
+
+            // Update displayed values on screen
+            $("#displayName").text(profileData.fullname || "Your Name");
+            $("#displayEmail").text(profileData.email);
+
         } else if (res.trim() === "Unauthorized" || res.trim() === "Invalid session") {
             window.location = "login.html";
         }
