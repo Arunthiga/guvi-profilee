@@ -13,4 +13,5 @@ define('MONGO_DB', 'guvi_internship');
 // Redis Configuration
 define('REDIS_HOST', getenv('REDISHOST') ?: '127.0.0.1');
 define('REDIS_PORT', getenv('REDISPORT') ?: 6379);
+define('REDIS_PASS', getenv('REDISPASSWORD') ?: null);
 ?>

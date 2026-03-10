@@ -6,9 +6,10 @@ use Predis\Client as RedisClient;
 
 try {
     $redis = new RedisClient([
-        'scheme' => 'tcp',
-        'host'   => REDIS_HOST,
-        'port'   => REDIS_PORT,
+        'scheme'   => 'tcp',
+        'host'     => REDIS_HOST,
+        'port'     => REDIS_PORT,
+        'password' => REDIS_PASS,
     ]);
 } catch (Exception $e) {
     die(json_encode(["status" => "error", "message" => "Redis Connection failed: " . $e->getMessage()]));

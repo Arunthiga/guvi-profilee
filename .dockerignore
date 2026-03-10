@@ -1,0 +1,14 @@
+.git
+vendor
+.DS_Store
+.env
+Dockerfile
+.dockerignore
+.vercel
+node_modules
+*.sql
+README*
+Procfile
+vercel.json
+php.ini
+api/.user.ini
